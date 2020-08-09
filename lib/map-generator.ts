@@ -1,0 +1,140 @@
+/*
+ * mpetroff/print-maps
+ * https://github.com/mpetroff/print-maps
+ * 
+ * I used the source code from the above repository. Thanks so much!
+ * 
+ * -----LICENSE------
+ * Print Maps - High-resolution maps in the browser, for printing
+ * Copyright (c) 2015-2020 Matthew Petroff
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+import * as jsPDF from 'jspdf';
+import { saveAs } from 'file-saver';
+import { Map as MapboxMap } from "mapbox-gl";
+
+export const Format = {
+  PNG: 'png',
+  PDF: 'pdf',
+} as const;
+type Format = typeof Format[keyof typeof Format];
+
+export const Unit = {
+  in: 'in',
+  mm: 'mm',
+} as const;
+type Unit = typeof Unit[keyof typeof Unit];
+
+export default class MapGenerator{
+
+  private map: MapboxMap;
+  private width: number;
+  private height: number;
+  private dpi: number;
+  private format: Format;
+  private unit: Unit;
+
+  constructor(map:MapboxMap, width?: number, height?: number, dpi?: number, format?:Format, unit?: Unit){
+    this.map = map;
+    this.width = width ? width : map.getCanvas().width / 96;
+    this.height = height ? height : map.getCanvas().height / 96;
+    this.dpi = dpi ? dpi : 300;
+    this.format = format ? format : Format.PNG;
+    this.unit = unit ? unit : Unit.in;
+  }
+
+  generate(){
+    const this_ = this;
+
+    // Calculate pixel ratio
+    var actualPixelRatio: number = window.devicePixelRatio;
+    Object.defineProperty(window, 'devicePixelRatio', {
+        get: function() {return this_.dpi / 96}
+    });
+    // Create map container
+    var hidden = document.createElement('div');
+    hidden.className = 'hidden-map';
+    document.body.appendChild(hidden);
+    var container = document.createElement('div');
+    container.style.width = this.toPixels(this.width);
+    container.style.height = this.toPixels(this.height);
+    hidden.appendChild(container);
+
+    //Render map
+    var renderMap = new MapboxMap({
+      container: container,
+      center: this.map.getCenter(),
+      zoom: this.map.getZoom(),
+      style: this.map.getStyle(),
+      bearing: this.map.getBearing(),
+      pitch: this.map.getPitch(),
+      interactive: false,
+      preserveDrawingBuffer: true,
+      fadeDuration: 0,
+      attributionControl: false
+  });
+
+  renderMap.once('idle', function() {
+    if (this_.format == Format.PNG) {
+      renderMap.getCanvas().toBlob(function(blob) {
+        saveAs(blob, 'map.png');
+      });
+    } else {
+      // TO DO: It is still under development
+      var pdf = new jsPDF({
+          orientation: this_.width > this_.height ? 'l' : 'p',
+          unit: this_.unit,
+          format: [this_.width, this_.height],
+          compress: true
+      });
+
+      pdf.addImage(renderMap.getCanvas(),'png', 0, 0, this_.width, this_.height, null, 'FAST');
+
+      var {lng, lat} = renderMap.getCenter();
+      pdf.setProperties({
+          title: renderMap.getStyle().name,
+          subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
+          creator: 'Print Maps',
+          author: '(c)Mapbox, (c)OpenStreetMap'
+      })
+
+      pdf.save('map.pdf');
+    }
+
+    renderMap.remove();
+    hidden.parentNode?.removeChild(hidden);
+    Object.defineProperty(window, 'devicePixelRatio', {
+        get: function() {return actualPixelRatio}
+    });
+  });
+
+  }
+
+  toPixels(length:number){
+    var unit = this.unit ? Unit.in : Unit.mm;
+    var conversionFactor = 96;
+    if (unit == Unit.mm) {
+        conversionFactor /= 25.4;
+    }
+    return conversionFactor * length + 'px';
+  }
+
+}
