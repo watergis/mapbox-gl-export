@@ -1,5 +1,5 @@
 import { IControl, Map as MapboxMap } from "mapbox-gl";
-import { default as MapGenerator } from './map-generator'
+import { default as MapGenerator, Size, Format } from './map-generator'
 
 /**
  * Mapbox GL Print Control.
@@ -10,6 +10,7 @@ export default class MapboxPrintControl implements IControl
 {
 
     private controlContainer: HTMLElement;
+    private printContainer: HTMLElement;
     private map?: MapboxMap;
     private printButton: HTMLButtonElement;
 
@@ -30,15 +31,85 @@ export default class MapboxPrintControl implements IControl
         this.controlContainer = document.createElement("div");
         this.controlContainer.classList.add("mapboxgl-ctrl");
         this.controlContainer.classList.add("mapboxgl-ctrl-group");
+        this.printContainer = document.createElement("div");
+        this.printContainer.classList.add("mapboxgl-print-list");
         this.printButton = document.createElement("button");
         this.printButton.classList.add("mapboxgl-ctrl-icon");
         this.printButton.classList.add("mapboxgl-print-control");
         this.printButton.addEventListener("click", () => {
-            const mapGenerator = new MapGenerator(map);
-            mapGenerator.generate();
+          this.printButton.style.display = "none";
+          this.printContainer.style.display = "block";
         });
         document.addEventListener("click", this.onDocumentClick);
         this.controlContainer.appendChild(this.printButton);
+        this.controlContainer.appendChild(this.printContainer);
+
+        var table = document.createElement('TABLE');
+        table.className = 'print-table';
+
+        let labelPageSize = document.createElement('label');
+        labelPageSize.textContent = 'Page Size';
+
+        const pageSize= document.createElement("select");
+        pageSize.style.width = "100%";
+        const optionA4_Landscape = document.createElement('option');
+        optionA4_Landscape.setAttribute("value", JSON.stringify(Size.A4_landscape));
+        optionA4_Landscape.appendChild( document.createTextNode("A4 Landscape") );
+        const optionA4_Portrait = document.createElement('option');
+        optionA4_Portrait.setAttribute("value", JSON.stringify(Size.A4_portrait));
+        optionA4_Portrait.appendChild( document.createTextNode("A4 Portrait") );
+        pageSize.setAttribute( "name", "page-size");
+        pageSize.appendChild(optionA4_Landscape);
+        pageSize.appendChild(optionA4_Portrait);
+        
+        var tr1 = document.createElement('TR');
+        var td1_1 = document.createElement('TD');
+        var td1_2 = document.createElement('TD');
+        td1_1.appendChild(labelPageSize);
+        td1_2.appendChild(pageSize);
+        tr1.appendChild(td1_1);
+        tr1.appendChild(td1_2);
+        table.appendChild(tr1);
+
+        let labelFormat = document.createElement('label');
+        labelFormat.textContent = 'Format';
+
+        const formatType= document.createElement("select");
+        formatType.style.width = "100%";
+        const optionPdf = document.createElement('option');
+        optionPdf.setAttribute("value", Format.PDF);
+        optionPdf.appendChild( document.createTextNode("PDF") );
+        const optionPng = document.createElement('option');
+        optionPng.setAttribute("value", Format.PNG);
+        optionPng.appendChild( document.createTextNode("PNG") );
+        formatType.setAttribute( "name", "format-type");
+        formatType.appendChild(optionPdf);
+        formatType.appendChild(optionPng);
+
+        var tr2 = document.createElement('TR');
+        var td2_1 = document.createElement('TD');
+        var td2_2 = document.createElement('TD');
+        td2_1.appendChild(labelFormat);
+        td2_2.appendChild(formatType);
+        tr2.appendChild(td2_1);
+        tr2.appendChild(td2_2);
+        table.appendChild(tr2);
+
+        this.printContainer.appendChild(table)
+        
+        const generateButton = document.createElement("button");
+        generateButton.textContent = 'Generate';
+        generateButton.classList.add('generate-button');
+        generateButton.addEventListener("click", () => {
+            console.log(pageSize.value);
+            const mapGenerator = new MapGenerator(
+              map,
+              JSON.parse(pageSize.value),
+              300,
+              formatType.value);
+            mapGenerator.generate();
+        });
+        this.printContainer.appendChild(generateButton);
 
         return this.controlContainer;
     }
@@ -55,8 +126,9 @@ export default class MapboxPrintControl implements IControl
     }
 
     private onDocumentClick(event: MouseEvent): void{
-      if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.printButton) {
-      this.printButton.style.display = "block";
+      if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.printContainer && this.printButton) {
+        this.printContainer.style.display = "none";
+        this.printButton.style.display = "block";
       }
     }
 }

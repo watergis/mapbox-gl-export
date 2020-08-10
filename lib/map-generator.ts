@@ -43,22 +43,28 @@ export const Unit = {
 } as const;
 type Unit = typeof Unit[keyof typeof Unit];
 
+export const Size = {
+  A4_landscape: [297, 210],
+  A4_portrait: [210, 297],
+} as const;
+type Size = typeof Size[keyof typeof Size];
+
 export default class MapGenerator{
 
   private map: MapboxMap;
   private width: number;
   private height: number;
   private dpi: number;
-  private format: Format;
+  private format: string;
   private unit: Unit;
 
-  constructor(map:MapboxMap, width?: number, height?: number, dpi?: number, format?:Format, unit?: Unit){
+  constructor(map:MapboxMap, size: Size = Size.A4_landscape, dpi: number=300, format:string=Format.PNG.toString(), unit: Unit=Unit.mm){
     this.map = map;
-    this.width = width ? width : map.getCanvas().width / 96;
-    this.height = height ? height : map.getCanvas().height / 96;
-    this.dpi = dpi ? dpi : 300;
-    this.format = format ? format : Format.PNG;
-    this.unit = unit ? unit : Unit.in;
+    this.width = size[0];
+    this.height = size[1];
+    this.dpi = dpi;
+    this.format = format;
+    this.unit = unit;
   }
 
   generate(){
@@ -102,17 +108,17 @@ export default class MapGenerator{
       var pdf = new jsPDF({
           orientation: this_.width > this_.height ? 'l' : 'p',
           unit: this_.unit,
-          format: [this_.width, this_.height],
+          // format: [this_.width, this_.height],
           compress: true
       });
 
-      pdf.addImage(renderMap.getCanvas(),'png', 0, 0, this_.width, this_.height, null, 'FAST');
+      pdf.addImage(renderMap.getCanvas().toDataURL('image/png'),'png', 0, 0, this_.width, this_.height, null, 'FAST');
 
       var {lng, lat} = renderMap.getCenter();
       pdf.setProperties({
           title: renderMap.getStyle().name,
           subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
-          creator: 'Print Maps',
+          creator: 'Mapbox GL Print Plugin',
           author: '(c)Mapbox, (c)OpenStreetMap'
       })
 
@@ -129,9 +135,8 @@ export default class MapGenerator{
   }
 
   toPixels(length:number){
-    var unit = this.unit ? Unit.in : Unit.mm;
     var conversionFactor = 96;
-    if (unit == Unit.mm) {
+    if (this.unit == Unit.mm) {
         conversionFactor /= 25.4;
     }
     return conversionFactor * length + 'px';
