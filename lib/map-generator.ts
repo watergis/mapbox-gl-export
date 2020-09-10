@@ -118,7 +118,7 @@ export default class MapGenerator{
       pdf.setProperties({
           title: renderMap.getStyle().name,
           subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
-          creator: 'Mapbox GL Print Plugin',
+          creator: 'Mapbox GL Export Plugin',
           author: '(c)Mapbox, (c)OpenStreetMap'
       })
 

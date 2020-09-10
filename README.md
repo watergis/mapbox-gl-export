@@ -1,20 +1,20 @@
-# mapbox-gl-print
-![](https://github.com/watergis/mapbox-gl-print/workflows/Node.js%20Package/badge.svg)
-![GitHub](https://img.shields.io/github/license/watergis/mapbox-gl-print)
+# mapbox-gl-export
+![](https://github.com/watergis/mapbox-gl-export/workflows/Node.js%20Package/badge.svg)
+![GitHub](https://img.shields.io/github/license/watergis/mapbox-gl-export)
 
-This module adds print control to mapbox-gl.
+This module adds control which can export PDF and images.
 
 This module is using source code of [mpetroff/print-maps](https://github.com/mpetroff/print-maps). I just adopted this library to normal Mapbox GL Plugin. Thanks so much to develop this library!
 
 ## Installation:
 
 ```bash
-npm i @watergis/mapbox-gl-print --save
+npm i @watergis/mapbox-gl-export --save
 ```
 
 ## Demo:
 
-See [demo](https://watergis.github.io/mapbox-gl-print/#12/-1.08551/35.87063).
+See [demo](https://watergis.github.io/mapbox-gl-export/#12/-1.08551/35.87063).
 
 ## Test:
 
@@ -28,18 +28,18 @@ open [http://localhost:8080](http://localhost:8080).
 ## Usage:
 
 ```ts
-import MapboxPrintControl from "@watergis/mapbox-gl-print";
-import '@watergis/mapbox-gl-print/css/styles.css';
+import MapboxExportControl from "@watergis/mapbox-gl-export";
+import '@watergis/mapbox-gl-export/css/styles.css';
 import mapboxgl from 'mapbox-gl';
 
 const map = new mapboxgl.Map();
-map.addControl(new MapboxPrintControl(), 'top-right');
+map.addControl(new MapboxExportControl(), 'top-right');
 });
 ```
 
 ## Attribution
 
-When you use printed map, please includes attribution as follows.
+When you use exported map, please includes attribution as follows.
 
 If you can include HTML, use this code snippet that includes links to Mapbox & OpenStreetMap:
 ```html
@@ -57,4 +57,4 @@ Also, default example is using base map by United Nation Vector Tile Toolkit. Th
 
 ## Contribution
 
-This Mapbox GL Print Control is still under development, especially exporting to PDF is not working well. so most welcome any feedbacks and pull request to this repository.
+This Mapbox GL Export Control is still under development. so most welcome any feedbacks and pull request to this repository.

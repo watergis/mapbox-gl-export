@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import mapboxgl from 'mapbox-gl';
-import MapboxPrintControl from '../dist/index';
+import MapboxExportControl from '../dist/index';
 import '../css/styles.css';
 
 $(function(){
@@ -14,5 +14,5 @@ $(function(){
         hash:true,
     });
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.addControl(new MapboxPrintControl(), 'top-right');
+    map.addControl(new MapboxExportControl(), 'top-right');
 })

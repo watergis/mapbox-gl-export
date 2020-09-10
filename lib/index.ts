@@ -2,17 +2,17 @@ import { IControl, Map as MapboxMap } from "mapbox-gl";
 import { default as MapGenerator, Size, Format } from './map-generator'
 
 /**
- * Mapbox GL Print Control.
+ * Mapbox GL Export Control.
  * @param {Object} targets - Object of layer.id and title
  */
 
-export default class MapboxPrintControl implements IControl
+export default class MapboxExportControl implements IControl
 {
 
     private controlContainer: HTMLElement;
-    private printContainer: HTMLElement;
+    private exportContainer: HTMLElement;
     private map?: MapboxMap;
-    private printButton: HTMLButtonElement;
+    private exportButton: HTMLButtonElement;
 
     constructor()
     {
@@ -31,18 +31,18 @@ export default class MapboxPrintControl implements IControl
         this.controlContainer = document.createElement("div");
         this.controlContainer.classList.add("mapboxgl-ctrl");
         this.controlContainer.classList.add("mapboxgl-ctrl-group");
-        this.printContainer = document.createElement("div");
-        this.printContainer.classList.add("mapboxgl-print-list");
-        this.printButton = document.createElement("button");
-        this.printButton.classList.add("mapboxgl-ctrl-icon");
-        this.printButton.classList.add("mapboxgl-print-control");
-        this.printButton.addEventListener("click", () => {
-          this.printButton.style.display = "none";
-          this.printContainer.style.display = "block";
+        this.exportContainer = document.createElement("div");
+        this.exportContainer.classList.add("mapboxgl-export-list");
+        this.exportButton = document.createElement("button");
+        this.exportButton.classList.add("mapboxgl-ctrl-icon");
+        this.exportButton.classList.add("mapboxgl-export-control");
+        this.exportButton.addEventListener("click", () => {
+          this.exportButton.style.display = "none";
+          this.exportContainer.style.display = "block";
         });
         document.addEventListener("click", this.onDocumentClick);
-        this.controlContainer.appendChild(this.printButton);
-        this.controlContainer.appendChild(this.printContainer);
+        this.controlContainer.appendChild(this.exportButton);
+        this.controlContainer.appendChild(this.exportContainer);
 
         var table = document.createElement('TABLE');
         table.className = 'print-table';
@@ -95,7 +95,7 @@ export default class MapboxPrintControl implements IControl
         tr2.appendChild(td2_2);
         table.appendChild(tr2);
 
-        this.printContainer.appendChild(table)
+        this.exportContainer.appendChild(table)
         
         const generateButton = document.createElement("button");
         generateButton.textContent = 'Generate';
@@ -109,26 +109,26 @@ export default class MapboxPrintControl implements IControl
               formatType.value);
             mapGenerator.generate();
         });
-        this.printContainer.appendChild(generateButton);
+        this.exportContainer.appendChild(generateButton);
 
         return this.controlContainer;
     }
 
     public onRemove(): void
     {
-      if (!this.controlContainer || !this.controlContainer.parentNode || !this.map || !this.printButton) {
+      if (!this.controlContainer || !this.controlContainer.parentNode || !this.map || !this.exportButton) {
         return;
       }
-      this.printButton.removeEventListener("click", this.onDocumentClick);
+      this.exportButton.removeEventListener("click", this.onDocumentClick);
       this.controlContainer.parentNode.removeChild(this.controlContainer);
       document.removeEventListener("click", this.onDocumentClick);
       this.map = undefined;
     }
 
     private onDocumentClick(event: MouseEvent): void{
-      if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.printContainer && this.printButton) {
-        this.printContainer.style.display = "none";
-        this.printButton.style.display = "block";
+      if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.exportContainer && this.exportButton) {
+        this.exportContainer.style.display = "none";
+        this.exportButton.style.display = "block";
       }
     }
 }
