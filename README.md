@@ -16,6 +16,8 @@ npm i @watergis/mapbox-gl-export --save
 
 See [demo](https://watergis.github.io/mapbox-gl-export/#12/-1.08551/35.87063).
 
+![demo.gif](./demo.gif)
+
 ## Test:
 
 ```
