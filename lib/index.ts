@@ -101,7 +101,7 @@ export default class MapboxExportControl implements IControl
         generateButton.textContent = 'Generate';
         generateButton.classList.add('generate-button');
         generateButton.addEventListener("click", () => {
-            console.log(pageSize.value);
+            // console.log(pageSize.value);
             const mapGenerator = new MapGenerator(
               map,
               JSON.parse(pageSize.value),
