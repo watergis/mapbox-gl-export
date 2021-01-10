@@ -44,10 +44,38 @@ export const Unit = {
 type Unit = typeof Unit[keyof typeof Unit];
 
 export const Size = {
-  A4_landscape: [297, 210],
-  A4_portrait: [210, 297],
+  A0: [1189, 841],
+  A1: [841, 594],
+  A2: [594, 420],
+  A3: [420, 297],
+  A4: [297, 210],
+  A5: [210, 148],
+  A6: [148, 105],
+  B0: [1414, 1000],
+  B1: [1000, 707],
+  B2: [707, 500],
+  B3: [500, 353],
+  B4: [353, 250],
+  B5: [250, 176],
+  B6: [176, 125],
+
 } as const;
 type Size = typeof Size[keyof typeof Size];
+
+export const PageOrientation = {
+  Landscape: 'landscape',
+  Portrait: 'portrait',
+} as const;
+type PageOrientation = typeof PageOrientation[keyof typeof PageOrientation];
+
+export const DPI = {
+  '72': 72,
+  '96': 96,
+  '200': 200,
+  '300': 300,
+  '400': 400,
+} as const;
+type DPI = typeof DPI[keyof typeof DPI];
 
 export default class MapGenerator{
 
@@ -58,7 +86,7 @@ export default class MapGenerator{
   private format: string;
   private unit: Unit;
 
-  constructor(map:MapboxMap, size: Size = Size.A4_landscape, dpi: number=300, format:string=Format.PNG.toString(), unit: Unit=Unit.mm){
+  constructor(map:MapboxMap, size: Size = Size.A4, dpi: number=300, format:string=Format.PNG.toString(), unit: Unit=Unit.mm){
     this.map = map;
     this.width = size[0];
     this.height = size[1];

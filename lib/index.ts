@@ -1,5 +1,5 @@
 import { IControl, Map as MapboxMap } from "mapbox-gl";
-import { default as MapGenerator, Size, Format } from './map-generator'
+import { default as MapGenerator, Size, Format, PageOrientation, DPI } from './map-generator'
 
 /**
  * Mapbox GL Export Control.
@@ -47,53 +47,29 @@ export default class MapboxExportControl implements IControl
         var table = document.createElement('TABLE');
         table.className = 'print-table';
 
-        let labelPageSize = document.createElement('label');
-        labelPageSize.textContent = 'Page Size';
-
-        const pageSize= document.createElement("select");
-        pageSize.style.width = "100%";
-        const optionA4_Landscape = document.createElement('option');
-        optionA4_Landscape.setAttribute("value", JSON.stringify(Size.A4_landscape));
-        optionA4_Landscape.appendChild( document.createTextNode("A4 Landscape") );
-        const optionA4_Portrait = document.createElement('option');
-        optionA4_Portrait.setAttribute("value", JSON.stringify(Size.A4_portrait));
-        optionA4_Portrait.appendChild( document.createTextNode("A4 Portrait") );
-        pageSize.setAttribute( "name", "page-size");
-        pageSize.appendChild(optionA4_Landscape);
-        pageSize.appendChild(optionA4_Portrait);
-        
-        var tr1 = document.createElement('TR');
-        var td1_1 = document.createElement('TD');
-        var td1_2 = document.createElement('TD');
-        td1_1.appendChild(labelPageSize);
-        td1_2.appendChild(pageSize);
-        tr1.appendChild(td1_1);
-        tr1.appendChild(td1_2);
+        const tr1 = this.createSelection(
+          Size,'Page Size', 'page-size', Size.A4, (data, key)=>{
+            return JSON.stringify(data[key])
+          })
         table.appendChild(tr1);
 
-        let labelFormat = document.createElement('label');
-        labelFormat.textContent = 'Format';
-
-        const formatType= document.createElement("select");
-        formatType.style.width = "100%";
-        const optionPdf = document.createElement('option');
-        optionPdf.setAttribute("value", Format.PDF);
-        optionPdf.appendChild( document.createTextNode("PDF") );
-        const optionPng = document.createElement('option');
-        optionPng.setAttribute("value", Format.PNG);
-        optionPng.appendChild( document.createTextNode("PNG") );
-        formatType.setAttribute( "name", "format-type");
-        formatType.appendChild(optionPdf);
-        formatType.appendChild(optionPng);
-
-        var tr2 = document.createElement('TR');
-        var td2_1 = document.createElement('TD');
-        var td2_2 = document.createElement('TD');
-        td2_1.appendChild(labelFormat);
-        td2_2.appendChild(formatType);
-        tr2.appendChild(td2_1);
-        tr2.appendChild(td2_2);
+        const tr2 = this.createSelection(
+          PageOrientation,'Page Orientation', 'page-orientaiton', PageOrientation.Landscape, (data, key)=>{
+            return data[key]
+          })
         table.appendChild(tr2);
+
+        const tr3 = this.createSelection(
+          Format,'Format', 'format-type', Format.PDF, (data, key)=>{
+            return data[key]
+          })
+        table.appendChild(tr3);
+
+        const tr4 = this.createSelection(
+          DPI,'DPI', 'dpi-type', DPI['300'], (data, key)=>{
+            return data[key]
+          })
+        table.appendChild(tr4);
 
         this.exportContainer.appendChild(table)
         
@@ -101,17 +77,54 @@ export default class MapboxExportControl implements IControl
         generateButton.textContent = 'Generate';
         generateButton.classList.add('generate-button');
         generateButton.addEventListener("click", () => {
-            console.log(pageSize.value);
-            const mapGenerator = new MapGenerator(
-              map,
-              JSON.parse(pageSize.value),
-              300,
-              formatType.value);
-            mapGenerator.generate();
+          const pageSize: HTMLSelectElement = <HTMLSelectElement>document.getElementById(`mapbox-gl-export-page-size`);
+          const pageOrientation: HTMLSelectElement = <HTMLSelectElement>document.getElementById(`mapbox-gl-export-page-orientaiton`);
+          const formatType: HTMLSelectElement = <HTMLSelectElement>document.getElementById(`mapbox-gl-export-format-type`);
+          const dpiType: HTMLSelectElement = <HTMLSelectElement>document.getElementById(`mapbox-gl-export-dpi-type`);
+          const orient_value = pageOrientation.value;
+          let pageSize_value = JSON.parse(pageSize.value);
+          if (orient_value === PageOrientation.Portrait){
+            pageSize_value = pageSize_value.reverse();
+          }
+          const mapGenerator = new MapGenerator(
+            map,
+            pageSize_value,
+            Number(dpiType.value),
+            formatType.value);
+          mapGenerator.generate();
         });
         this.exportContainer.appendChild(generateButton);
 
         return this.controlContainer;
+    }
+
+    private createSelection(data : Object, title: string, type:string, defaultValue: any, converter: Function): HTMLElement
+    {
+      let label = document.createElement('label');
+      label.textContent = title;
+
+      const content= document.createElement("select");
+      content.setAttribute("id", `mapbox-gl-export-${type}`);
+      content.style.width = "100%";
+      Object.keys(data).forEach(key=>{
+        const option_layout = document.createElement('option');
+        option_layout.setAttribute("value", converter(data, key));
+        option_layout.appendChild( document.createTextNode(key) );
+        option_layout.setAttribute( "name", type);
+        if (defaultValue === data[key]){
+          option_layout.selected = true;
+        }
+        content.appendChild(option_layout);
+      })
+      
+      var tr1 = document.createElement('TR');
+      var td1_1 = document.createElement('TD');
+      var td1_2 = document.createElement('TD');
+      td1_1.appendChild(label);
+      td1_2.appendChild(content);
+      tr1.appendChild(td1_1);
+      tr1.appendChild(td1_2);
+      return tr1;
     }
 
     public onRemove(): void
