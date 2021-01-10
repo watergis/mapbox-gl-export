@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "file-saver": "^2.0.2",
+    "js-loading-overlay": "^1.2.0",
     "jspdf": "^1.5.3",
     "mapbox-gl": "^1.12.0"
   }
