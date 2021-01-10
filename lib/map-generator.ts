@@ -139,7 +139,6 @@ export default class MapGenerator{
       container: container,
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),
-      style: this.map.getStyle(),
       bearing: this.map.getBearing(),
       pitch: this.map.getPitch(),
       interactive: false,
@@ -147,6 +146,18 @@ export default class MapGenerator{
       fadeDuration: 0,
       attributionControl: false
   });
+  let style = this.map.getStyle();
+  for (let name in style.sources){
+    let src = style.sources[name];
+    Object.keys(src).forEach(key=>{
+      //delete properties if value is undefined.
+      // for instance, raster-dem might has undefined value in "url" and "bounds"
+      if (!src[key]){
+        delete src[key];
+      }
+    })
+  }
+  renderMap.setStyle(style)
 
   renderMap.once('idle', function() {
     const canvas = renderMap.getCanvas();
