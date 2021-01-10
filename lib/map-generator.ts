@@ -33,6 +33,7 @@ import { Map as MapboxMap } from "mapbox-gl";
 import 'js-loading-overlay';
 
 export const Format = {
+  JPEG: 'jpg',
   PNG: 'png',
   PDF: 'pdf',
 } as const;
@@ -148,30 +149,53 @@ export default class MapGenerator{
   });
 
   renderMap.once('idle', function() {
-    if (this_.format == Format.PNG) {
-      renderMap.getCanvas().toBlob(function(blob) {
-        saveAs(blob, 'map.png');
-      });
-    } else {
-      // TO DO: It is still under development
-      var pdf = new jsPDF({
-          orientation: this_.width > this_.height ? 'l' : 'p',
-          unit: this_.unit,
-          // format: [this_.width, this_.height],
-          compress: true
-      });
+    const canvas = renderMap.getCanvas();
+    switch (this_.format){
+      case Format.PNG:
+        canvas.toBlob(function(blob) {
+          saveAs(blob, `map.${Format.PNG}`);
+        });
+        break;
+      case Format.JPEG:
+        const uri = renderMap.getCanvas().toDataURL('image/jpeg', 0.85);
+        const fileName = `map.${Format.JPEG}`;
+        // @ts-ignore
+        if (canvas.msToBlob) { 
+          //for IE11
+          var blob = this_.toBlob(uri);
+		      window.navigator.msSaveBlob(blob, fileName);
+        }else{
+          //for other browsers except IE11
+          const a = document.createElement('a');
+          a.href = uri;
+          a.download = fileName;
+          a.click();
+          a.remove();
+        }
+        break;
+      case Format.PDF:
+        // TO DO: It is still under development
+        var pdf = new jsPDF({
+            orientation: this_.width > this_.height ? 'l' : 'p',
+            unit: this_.unit,
+            compress: true
+        });
 
-      pdf.addImage(renderMap.getCanvas().toDataURL('image/png'),'png', 0, 0, this_.width, this_.height, null, 'FAST');
+        pdf.addImage(canvas.toDataURL('image/png'),'png', 0, 0, this_.width, this_.height, null, 'FAST');
 
-      var {lng, lat} = renderMap.getCenter();
-      pdf.setProperties({
-          title: renderMap.getStyle().name,
-          subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
-          creator: 'Mapbox GL Export Plugin',
-          author: '(c)Mapbox, (c)OpenStreetMap'
-      })
+        var {lng, lat} = renderMap.getCenter();
+        pdf.setProperties({
+            title: renderMap.getStyle().name,
+            subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
+            creator: 'Mapbox GL Export Plugin',
+            author: '(c)Mapbox, (c)OpenStreetMap'
+        })
 
-      pdf.save('map.pdf');
+        pdf.save('map.pdf');
+        break;
+      default:
+        alert(`Invalid file format: ${this_.format}`);
+        break;
     }
 
     renderMap.remove();
@@ -193,6 +217,16 @@ export default class MapGenerator{
         conversionFactor /= 25.4;
     }
     return conversionFactor * length + 'px';
+  }
+
+  toBlob(base64: string): Blob{
+    const bin = atob(base64.replace(/^.*,/, ''));
+    let buffer = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) {
+      buffer[i] = bin.charCodeAt(i);
+    }
+    const blob = new Blob([buffer.buffer], {type: 'image/png'});
+    return blob;
   }
 
 }
