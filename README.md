@@ -30,14 +30,37 @@ open [http://localhost:8080](http://localhost:8080).
 ## Usage:
 
 ```ts
-import MapboxExportControl from "@watergis/mapbox-gl-export";
+import { MapboxExportControl, Size, PageOrientation, Format, DPI} from "@watergis/mapbox-gl-export";
 import '@watergis/mapbox-gl-export/css/styles.css';
 import mapboxgl from 'mapbox-gl';
 
 const map = new mapboxgl.Map();
+// create control with default options
 map.addControl(new MapboxExportControl(), 'top-right');
-});
+// create control with specified options
+map.addControl(new MapboxExportControl({
+    PageSize: Size.A3,
+    PageOrientation: PageOrientation.Portrait,
+    Format: Format.PNG,
+    DPI: DPI[96]
+}), 'top-right');
 ```
+
+### Options
+You can specify default option as follows.
+
+- PageSize
+  - You can select from A2 to A6 or B2 to B6
+  - default page size is A4
+- PageOrientation
+  - You can select `landscape` or `portrait`
+  - default is `landscape`
+- Format
+  - You can select it from `jpg`, `png` and `pdf`
+  - default is `PDF`
+- DPI
+  - You can select it from `72`, `96`, `200`, `300` and `400`.
+  - default is `300`
 
 ## Attribution
 

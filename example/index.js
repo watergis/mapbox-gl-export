@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import mapboxgl from 'mapbox-gl';
-import MapboxExportControl from '../dist/index';
+import { MapboxExportControl, Size, PageOrientation, Format, DPI} from '../dist/index';
 import '../css/styles.css';
 
 $(function(){
@@ -14,5 +14,10 @@ $(function(){
         hash:true,
     });
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    map.addControl(new MapboxExportControl(), 'top-right');
+    map.addControl(new MapboxExportControl({
+        PageSize: Size.A3,
+        PageOrientation: PageOrientation.Portrait,
+        Format: Format.PNG,
+        DPI: DPI[96]
+    }), 'top-right');
 })
