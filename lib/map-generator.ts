@@ -31,15 +31,19 @@ import * as jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
 import { Map as MapboxMap } from "mapbox-gl";
 import 'js-loading-overlay';
+import { fabric } from "fabric";
+
 
 export const Format = {
   JPEG: 'jpg',
   PNG: 'png',
   PDF: 'pdf',
+  SVG: 'svg',
 } as const;
 type Format = typeof Format[keyof typeof Format];
 
 export const Unit = {
+  // don't use inch unit. because page size setting is using mm unit.
   in: 'in',
   mm: 'mm',
 } as const;
@@ -89,6 +93,14 @@ export default class MapGenerator{
   private format: string;
   private unit: Unit;
 
+  /**
+   * Constructor
+   * @param map MapboxMap object
+   * @param size layout size. default is A4
+   * @param dpi dpi value. deafult is 300
+   * @param format image format. default is PNG
+   * @param unit length unit. default is mm
+   */
   constructor(map:MapboxMap, size: Size = Size.A4, dpi: number=300, format:string=Format.PNG.toString(), unit: Unit=Unit.mm){
     this.map = map;
     this.width = size[0];
@@ -98,6 +110,9 @@ export default class MapGenerator{
     this.unit = unit;
   }
 
+  /**
+   * Generate and download Map image
+   */
   generate(){
     const this_ = this;
 
@@ -161,48 +176,19 @@ export default class MapGenerator{
 
   renderMap.once('idle', function() {
     const canvas = renderMap.getCanvas();
+    const fileName = `map.${this_.format}`;
     switch (this_.format){
       case Format.PNG:
-        canvas.toBlob(function(blob) {
-          saveAs(blob, `map.${Format.PNG}`);
-        });
+        this_.toPNG(canvas, fileName);
         break;
       case Format.JPEG:
-        const uri = renderMap.getCanvas().toDataURL('image/jpeg', 0.85);
-        const fileName = `map.${Format.JPEG}`;
-        // @ts-ignore
-        if (canvas.msToBlob) { 
-          //for IE11
-          var blob = this_.toBlob(uri);
-		      window.navigator.msSaveBlob(blob, fileName);
-        }else{
-          //for other browsers except IE11
-          const a = document.createElement('a');
-          a.href = uri;
-          a.download = fileName;
-          a.click();
-          a.remove();
-        }
+        this_.toJPEG(canvas, fileName);
         break;
       case Format.PDF:
-        // TO DO: It is still under development
-        var pdf = new jsPDF({
-            orientation: this_.width > this_.height ? 'l' : 'p',
-            unit: this_.unit,
-            compress: true
-        });
-
-        pdf.addImage(canvas.toDataURL('image/png'),'png', 0, 0, this_.width, this_.height, null, 'FAST');
-
-        var {lng, lat} = renderMap.getCenter();
-        pdf.setProperties({
-            title: renderMap.getStyle().name,
-            subject: `center: [${lng}, ${lat}], zoom: ${renderMap.getZoom()}`,
-            creator: 'Mapbox GL Export Plugin',
-            author: '(c)Mapbox, (c)OpenStreetMap'
-        })
-
-        pdf.save('map.pdf');
+        this_.toPDF(renderMap, fileName);
+        break;
+      case Format.SVG:
+        this_.toSVG(canvas, fileName);
         break;
       default:
         alert(`Invalid file format: ${this_.format}`);
@@ -222,15 +208,124 @@ export default class MapGenerator{
 
   }
 
-  toPixels(length:number){
-    var conversionFactor = 96;
+  /**
+   * Convert canvas to PNG
+   * @param canvas Canvas element
+   * @param fileName file name
+   */
+  private toPNG(canvas: HTMLCanvasElement, fileName: string)
+  {
+    canvas.toBlob(function(blob) {
+      saveAs(blob, fileName);
+    });
+  }
+
+  /**
+   * Convert canvas to JPEG
+   * @param canvas Canvas element
+   * @param fileName file name
+   */
+  private toJPEG(canvas: HTMLCanvasElement, fileName: string)
+  {
+    const uri = canvas.toDataURL('image/jpeg', 0.85);
+    // @ts-ignore
+    if (canvas.msToBlob) { 
+      //for IE11
+      var blob = this.toBlob(uri);
+      window.navigator.msSaveBlob(blob, fileName);
+    }else{
+      //for other browsers except IE11
+      const a = document.createElement('a');
+      a.href = uri;
+      a.download = fileName;
+      a.click();
+      a.remove();
+    }
+  }
+
+  /**
+   * Convert Map object to PDF
+   * @param map mapboxgl.Map object
+   * @param fileName file name
+   */
+  private toPDF(map: mapboxgl.Map, fileName: string)
+  {
+    const canvas = map.getCanvas();
+    var pdf = new jsPDF({
+      orientation: this.width > this.height ? 'l' : 'p',
+      unit: this.unit,
+      compress: true
+    });
+
+    pdf.addImage(canvas.toDataURL('image/png'),'png', 0, 0, this.width, this.height, null, 'FAST');
+
+    var {lng, lat} = map.getCenter();
+    pdf.setProperties({
+      title: map.getStyle().name,
+      subject: `center: [${lng}, ${lat}], zoom: ${map.getZoom()}`,
+      creator: 'Mapbox GL Export Plugin',
+      author: '(c)Mapbox, (c)OpenStreetMap'
+    })
+
+    pdf.save(fileName);
+  }
+
+  /**
+   * Convert canvas to SVG
+   * this SVG export is using fabric.js. It is under experiment.
+   * Please also see their document.
+   * http://fabricjs.com/docs/
+   * @param canvas Canvas element
+   * @param fileName file name
+   */
+  private toSVG(canvas: HTMLCanvasElement, fileName: string)
+  {
+    const uri = canvas.toDataURL('image/png');
+    fabric.Image.fromURL(uri, (image)=>{
+      const canvas = new fabric.Canvas('canvas');
+      const px_width = Number(this.toPixels(this.width, this.dpi).replace("px", ""));
+      const px_height = Number(this.toPixels(this.height, this.dpi).replace("px", ""));
+      image.scaleToWidth(px_width);
+      image.scaleToHeight(px_height);
+      
+      canvas.add(image);
+      const svg = canvas.toSVG({
+        x:0,
+        y:0,
+        width: px_width,
+        height: px_height,
+        viewBox: {
+          x:0,
+          y:0,
+          width: px_width,
+          height: px_height,
+        },
+      });
+      const a = document.createElement('a');
+      a.href = "data:application/xml," + encodeURIComponent(svg);
+      a.download = fileName;
+      a.click();
+      a.remove();
+    })
+  }
+
+  /**
+   * Convert mm/inch to pixel
+   * @param length mm/inch length
+   * @param conversionFactor DPI value. default is 96. 
+   */
+  private toPixels(length:number, conversionFactor=96){
     if (this.unit == Unit.mm) {
         conversionFactor /= 25.4;
     }
     return conversionFactor * length + 'px';
   }
 
-  toBlob(base64: string): Blob{
+  /**
+   * Convert base64 to Blob
+   * @param base64 string value for base64
+   */
+  private toBlob(base64: string): Blob{
     const bin = atob(base64.replace(/^.*,/, ''));
     let buffer = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) {

@@ -56,7 +56,7 @@ You can specify default option as follows.
   - You can select `landscape` or `portrait`
   - default is `landscape`
 - Format
-  - You can select it from `jpg`, `png` and `pdf`
+  - You can select it from `jpg`, `png`, `svg` and `pdf`
   - default is `PDF`
 - DPI
   - You can select it from `72`, `96`, `200`, `300` and `400`.
