@@ -2,6 +2,7 @@ import { IControl, Map as MapboxMap } from "mapbox-gl";
 import { default as MapGenerator, Size, Format, PageOrientation, DPI } from './map-generator'
 
 type Options = {
+  accessToken?: string;
   PageSize: any;
   PageOrientation: string;
   Format: string;
@@ -21,6 +22,7 @@ export default class MapboxExportControl implements IControl
     private exportButton: HTMLButtonElement;
 
     private options: Options = {
+      accessToken: undefined,
       PageSize: Size.A4,
       PageOrientation: PageOrientation.Landscape,
       Format: Format.PDF,

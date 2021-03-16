@@ -92,6 +92,7 @@ export default class MapGenerator{
   private dpi: number;
   private format: string;
   private unit: Unit;
+  private accessToken: string | undefined;
 
   /**
    * Constructor
@@ -101,13 +102,20 @@ export default class MapGenerator{
    * @param format image format. default is PNG
    * @param unit length unit. default is mm
    */
-  constructor(map:MapboxMap, size: Size = Size.A4, dpi: number=300, format:string=Format.PNG.toString(), unit: Unit=Unit.mm){
+  constructor(
+    map:MapboxMap, 
+    size: Size = Size.A4, 
+    dpi: number=300, 
+    format:string=Format.PNG.toString(), 
+    unit: Unit=Unit.mm,
+    accessToken=undefined){
     this.map = map;
     this.width = size[0];
     this.height = size[1];
     this.dpi = dpi;
     this.format = format;
     this.unit = unit;
+    this.accessToken = accessToken;
   }
 
   /**
@@ -151,6 +159,7 @@ export default class MapGenerator{
 
     //Render map
     var renderMap = new MapboxMap({
+      accessToken: this.accessToken,
       container: container,
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),

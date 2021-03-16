@@ -42,7 +42,9 @@ map.addControl(new MapboxExportControl({
     PageSize: Size.A3,
     PageOrientation: PageOrientation.Portrait,
     Format: Format.PNG,
-    DPI: DPI[96]
+    DPI: DPI[96],
+    // please specify mapbox accessToken if you use it
+    accessToken: mapboxgl.accessToken
 }), 'top-right');
 ```
 

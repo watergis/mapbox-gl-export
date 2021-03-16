@@ -1,9 +1,8 @@
-import $ from 'jquery';
 import mapboxgl from 'mapbox-gl';
 import { MapboxExportControl, Size, PageOrientation, Format, DPI} from '../dist/index';
 import '../css/styles.css';
 
-$(function(){
+(()=>{
     // mapboxgl.accessToken='your mapbox access token'
     const map = new mapboxgl.Map({
         container: 'map',
@@ -18,6 +17,7 @@ $(function(){
         PageSize: Size.A3,
         PageOrientation: PageOrientation.Portrait,
         Format: Format.PNG,
-        DPI: DPI[96]
+        DPI: DPI[96],
+        accessToken: mapboxgl.accessToken
     }), 'top-right');
-})
+})()
