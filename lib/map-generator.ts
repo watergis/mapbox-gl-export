@@ -101,6 +101,7 @@ export default class MapGenerator{
    * @param dpi dpi value. deafult is 300
    * @param format image format. default is PNG
    * @param unit length unit. default is mm
+   * @param accessToken Mapbox AccessToken. default is undefined
    */
   constructor(
     map:MapboxMap, 
@@ -108,7 +109,8 @@ export default class MapGenerator{
     dpi: number=300, 
     format:string=Format.PNG.toString(), 
     unit: Unit=Unit.mm,
-    accessToken=undefined){
+    accessToken: string | undefined=undefined
+  ){
     this.map = map;
     this.width = size[0];
     this.height = size[1];
