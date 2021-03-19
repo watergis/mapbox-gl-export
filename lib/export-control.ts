@@ -2,7 +2,6 @@ import { IControl, Map as MapboxMap } from "mapbox-gl";
 import { default as MapGenerator, Size, Format, PageOrientation, DPI, Unit } from './map-generator'
 
 type Options = {
-  accessToken?: string;
   PageSize: any;
   PageOrientation: string;
   Format: string;
@@ -22,7 +21,6 @@ export default class MapboxExportControl implements IControl
     private exportButton: HTMLButtonElement;
 
     private options: Options = {
-      accessToken: undefined,
       PageSize: Size.A4,
       PageOrientation: PageOrientation.Landscape,
       Format: Format.PDF,
@@ -104,14 +102,12 @@ export default class MapboxExportControl implements IControl
           if (orient_value === PageOrientation.Portrait){
             pageSize_value = pageSize_value.reverse();
           }
-          const accessToken = this.options.accessToken;
           const mapGenerator = new MapGenerator(
             map,
             pageSize_value,
             Number(dpiType.value),
             formatType.value,
-            Unit.mm,
-            accessToken);
+            Unit.mm);
           mapGenerator.generate();
         });
         this.exportContainer.appendChild(generateButton);

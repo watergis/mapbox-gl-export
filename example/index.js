@@ -18,6 +18,5 @@ import '../css/styles.css';
         PageOrientation: PageOrientation.Portrait,
         Format: Format.PNG,
         DPI: DPI[96],
-        accessToken: mapboxgl.accessToken
     }), 'top-right');
 })()

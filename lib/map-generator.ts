@@ -29,7 +29,7 @@
 
 import * as jsPDF from 'jspdf';
 import { saveAs } from 'file-saver';
-import { Map as MapboxMap } from "mapbox-gl";
+import { accessToken, Map as MapboxMap } from "mapbox-gl";
 import 'js-loading-overlay';
 import { fabric } from "fabric";
 
@@ -92,7 +92,6 @@ export default class MapGenerator{
   private dpi: number;
   private format: string;
   private unit: Unit;
-  private accessToken: string | undefined;
 
   /**
    * Constructor
@@ -101,7 +100,6 @@ export default class MapGenerator{
    * @param dpi dpi value. deafult is 300
    * @param format image format. default is PNG
    * @param unit length unit. default is mm
-   * @param accessToken Mapbox AccessToken. default is undefined
    */
   constructor(
     map:MapboxMap, 
@@ -109,7 +107,6 @@ export default class MapGenerator{
     dpi: number=300, 
     format:string=Format.PNG.toString(), 
     unit: Unit=Unit.mm,
-    accessToken: string | undefined=undefined
   ){
     this.map = map;
     this.width = size[0];
@@ -117,7 +114,6 @@ export default class MapGenerator{
     this.dpi = dpi;
     this.format = format;
     this.unit = unit;
-    this.accessToken = accessToken;
   }
 
   /**
@@ -161,7 +157,7 @@ export default class MapGenerator{
 
     //Render map
     var renderMap = new MapboxMap({
-      accessToken: this.accessToken,
+      accessToken: accessToken,
       container: container,
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),
