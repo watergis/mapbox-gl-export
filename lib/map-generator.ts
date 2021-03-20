@@ -166,7 +166,8 @@ export default class MapGenerator{
       interactive: false,
       preserveDrawingBuffer: true,
       fadeDuration: 0,
-      attributionControl: false
+      attributionControl: false,
+      transformRequest: (this.map as any)._requestManager._transformRequestFn // hack to read transfrom request callback function
   });
   let style = this.map.getStyle();
   for (let name in style.sources){
