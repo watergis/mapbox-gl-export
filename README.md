@@ -80,6 +80,20 @@ For print output or if you can’t include links, use this text-only attribution
 
 Also, default example is using base map by United Nation Vector Tile Toolkit. That is why `Powered by the United Nations Vector Tile Toolkit` is included in above.
 
+## How to release
+
+```zsh
+vi package.json
+# update version in package.json
+git add package.json
+git commit -m "v1.X.X"
+git push origin master
+git tag v1.X.X master
+git push --tag
+# release CI will create draft release in Github pages, then publish it if it is ready.
+# publish CI will deploy npmjs and Github Packages.
+```
+
 ## Contribution
 
 This Mapbox GL Export Control is still under development. so most welcome any feedbacks and pull request to this repository.
