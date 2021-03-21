@@ -1,0 +1,33 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: deploy gh-pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: npm ci
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: configure git, build and deploy
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      run: |
+        npm run build
+        git config --global user.name "watergis+githubci"
+        git config --global user.email "watergis+githubci@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${NODE_AUTH_TOKEN}@github.com/watergis/mapbox-gl-export.git
+        npm run deploy
+      
