@@ -18,5 +18,6 @@ import '../css/styles.css';
         PageOrientation: PageOrientation.Portrait,
         Format: Format.PNG,
         DPI: DPI[96],
+        Crosshair: true,
     }), 'top-right');
 })()
