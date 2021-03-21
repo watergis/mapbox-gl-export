@@ -167,7 +167,6 @@ export default class MapboxExportControl implements IControl
     }
 
     private onDocumentClick(event: MouseEvent): void{
-      console.log('onDocumentClick');
       if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.exportContainer && this.exportButton) {
         this.exportContainer.style.display = "none";
         this.exportButton.style.display = "block";
