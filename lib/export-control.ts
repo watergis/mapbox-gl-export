@@ -1,4 +1,5 @@
 import { IControl, Map as MapboxMap } from "mapbox-gl";
+import CrosshairManager from "./crosshair-manager";
 import { default as MapGenerator, Size, Format, PageOrientation, DPI, Unit } from './map-generator'
 
 type Options = {
@@ -6,6 +7,7 @@ type Options = {
   PageOrientation: string;
   Format: string;
   DPI: number;
+  Crosshair?: boolean;
 }
 
 /**
@@ -17,6 +19,7 @@ export default class MapboxExportControl implements IControl
 
     private controlContainer: HTMLElement;
     private exportContainer: HTMLElement;
+    private crosshair: CrosshairManager | undefined;
     private map?: MapboxMap;
     private exportButton: HTMLButtonElement;
 
@@ -25,6 +28,7 @@ export default class MapboxExportControl implements IControl
       PageOrientation: PageOrientation.Landscape,
       Format: Format.PDF,
       DPI: DPI[300],
+      Crosshair: false,
     }
 
     constructor(options: Options)
@@ -88,7 +92,7 @@ export default class MapboxExportControl implements IControl
         table.appendChild(tr4);
 
         this.exportContainer.appendChild(table)
-        
+
         const generateButton = document.createElement("button");
         generateButton.textContent = 'Generate';
         generateButton.classList.add('generate-button');
@@ -152,6 +156,13 @@ export default class MapboxExportControl implements IControl
       this.exportButton.removeEventListener("click", this.onDocumentClick);
       this.controlContainer.parentNode.removeChild(this.controlContainer);
       document.removeEventListener("click", this.onDocumentClick);
+
+
+      if (this.crosshair !== undefined) {
+        this.crosshair.destroy();
+        this.crosshair = undefined;
+      }
+
       this.map = undefined;
     }
 
@@ -159,6 +170,16 @@ export default class MapboxExportControl implements IControl
       if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.exportContainer && this.exportButton) {
         this.exportContainer.style.display = "none";
         this.exportButton.style.display = "block";
+
+        if (this.crosshair !== undefined) {
+          this.crosshair.destroy();
+          this.crosshair = undefined;
+        }
+      } else {
+        if (this.options.Crosshair === true) {
+          this.crosshair = new CrosshairManager(this.map);
+          this.crosshair.create();
+        }
       }
     }
 }
