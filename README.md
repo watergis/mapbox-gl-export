@@ -1,4 +1,5 @@
 # mapbox-gl-export
+![](https://github.com/watergis/mapbox-gl-export/workflows/build/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/deploy%20gh-pages/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/Release%20Draft/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/Node.js%20Package/badge.svg)
