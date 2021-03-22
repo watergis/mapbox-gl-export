@@ -91,6 +91,8 @@ Also, default example is using base map by United Nation Vector Tile Toolkit. Th
 ## Development:
 
 ```
+npm run lint # check styling of source code
+npm run lint:fix # fix styling by eslint
 npm run dev
 ```
 
