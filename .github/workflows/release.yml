@@ -20,8 +20,8 @@ jobs:
         CI: true
     - name: build
       run: |
-      npm run lint
-      npm run build
+        npm run lint
+        npm run build
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
