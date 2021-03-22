@@ -59,6 +59,7 @@ export default class MapboxExportControl implements IControl
         this.exportButton.addEventListener("click", () => {
           this.exportButton.style.display = "none";
           this.exportContainer.style.display = "block";
+          this.toggleCrosshair(true);
         });
         document.addEventListener("click", this.onDocumentClick);
         this.controlContainer.appendChild(this.exportButton);
@@ -170,13 +171,18 @@ export default class MapboxExportControl implements IControl
       if (this.controlContainer && !this.controlContainer.contains(event.target as Element) && this.exportContainer && this.exportButton) {
         this.exportContainer.style.display = "none";
         this.exportButton.style.display = "block";
+        this.toggleCrosshair(false);
+      } 
+    }
 
-        if (this.crosshair !== undefined) {
-          this.crosshair.destroy();
-          this.crosshair = undefined;
-        }
-      } else {
-        if (this.options.Crosshair === true) {
+    private toggleCrosshair(state: boolean) {
+      if (this.options.Crosshair === true) {
+        if (state === false) {
+          if (this.crosshair !== undefined) {
+            this.crosshair.destroy();
+            this.crosshair = undefined;
+          }
+        } else {
           this.crosshair = new CrosshairManager(this.map);
           this.crosshair.create();
         }
