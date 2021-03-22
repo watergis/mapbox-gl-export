@@ -53,8 +53,8 @@ map.addControl(new MapboxExportControl({
 You can specify default option as follows.
 
 - PageSize
-  - You can select from A2 to A6 or B2 to B6
-  - default page size is A4
+  - You can select from `A2` to `A6` or `B2` to `B6`
+  - default page size is `A4`
 - PageOrientation
   - You can select `landscape` or `portrait`
   - default is `landscape`
@@ -66,8 +66,8 @@ You can specify default option as follows.
   - default is `300`
 - Crosshair
   - Display crosshair on the map. it helps to adjust the map center before printing.
-  - accepts true and false value
-  - default is false
+  - accepts `true` and `false` value
+  - default is `false`
 
 ## Attribution
 
