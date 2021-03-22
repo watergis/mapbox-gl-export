@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { MapboxExportControl, Size, PageOrientation, Format, DPI} from '../dist/index';
+import { MapboxExportControl, Size, PageOrientation, Format, DPI} from '../lib/index';
 import '../css/styles.css';
 
 (()=>{

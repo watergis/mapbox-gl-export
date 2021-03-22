@@ -10,24 +10,25 @@ This module is using source code of [mpetroff/print-maps](https://github.com/mpe
 
 ## Installation:
 
+- for mapbox-gl-js v1 open source users
+
 ```bash
 npm i @watergis/mapbox-gl-export --save
 ```
+
+- for mapbox-gl-js v2 users
+
+```
+npm i git+https://github.com/watergis/mapbox-gl-export.git#mbgljs-v2
+```
+
+Note. `mbgljs-v2` branch is not being maintained actively although it has been upgraded to v2 library. This repository does not support anything for mapbox-gl-js v2.
 
 ## Demo:
 
 See [demo](https://watergis.github.io/mapbox-gl-export/#12/-1.08551/35.87063).
 
 ![demo.gif](./demo.gif)
-
-## Test:
-
-```
-npm run build
-npm start
-```
-
-open [http://localhost:8080](http://localhost:8080).
 
 ## Usage:
 
@@ -86,6 +87,32 @@ For print output or if you can’t include links, use this text-only attribution
 `© NARWASSCO, Ltd.` is default example of map data by `Narok Water and Sewerage Services Co., Ltd.`, Kenya. If you don't use current map, you don't need to use this attribution.
 
 Also, default example is using base map by United Nation Vector Tile Toolkit. That is why `Powered by the United Nations Vector Tile Toolkit` is included in above.
+
+## Development:
+
+```
+npm run dev
+```
+
+open [http://localhost:8080](http://localhost:8080).
+
+If there are any changes on source code, it will be reflected automatically.
+
+## Build package:
+
+```
+npm run build
+```
+
+The modules will be generated under `dist` folder.
+
+## Deploy to Github pages
+
+```
+npm run deploy
+```
+
+It will deploy files under `example` folder to gh-pages.
 
 ## How to release
 
