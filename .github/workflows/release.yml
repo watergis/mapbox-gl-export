@@ -18,7 +18,8 @@ jobs:
     - run: npm ci 
       env:
         CI: true
-    - run: |
+    - name: build
+      run: |
       npm run lint
       npm run build
     - name: Create Release
