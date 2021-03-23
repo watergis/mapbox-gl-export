@@ -6,6 +6,10 @@ name: deploy gh-pages
 on:
   push:
     branches: [ master ]
+    paths:
+      - "lib/**"
+      - "example/**"
+      - "css/**"
 
 jobs:
   build:
