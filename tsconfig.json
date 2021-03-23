@@ -6,7 +6,7 @@
       "experimentalDecorators": true,
       "lib": [
           "dom",
-          "es2017"
+          "es2020"
       ],
       "module": "commonjs",
       "moduleResolution": "node",

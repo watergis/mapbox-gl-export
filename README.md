@@ -1,4 +1,5 @@
 # mapbox-gl-export
+![](https://github.com/watergis/mapbox-gl-export/workflows/build/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/deploy%20gh-pages/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/Release%20Draft/badge.svg)
 ![](https://github.com/watergis/mapbox-gl-export/workflows/Node.js%20Package/badge.svg)
@@ -91,6 +92,8 @@ Also, default example is using base map by United Nation Vector Tile Toolkit. Th
 ## Development:
 
 ```
+npm run lint # check styling of source code
+npm run lint:fix # fix styling by eslint
 npm run dev
 ```
 
