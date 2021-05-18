@@ -27,7 +27,7 @@
  * THE SOFTWARE.
  */
 
-import { jsPDF }  from 'jspdf';
+import { jsPDF } from 'jspdf';
 import { saveAs } from 'file-saver';
 import { accessToken, Map as MapboxMap } from 'mapbox-gl';
 import 'js-loading-overlay';
@@ -265,7 +265,7 @@ export default class MapGenerator {
       unit: this.unit,
       compress: true,
     });
-    
+
     pdf.addImage(canvas.toDataURL('image/png'), 'png', 0, 0, this.width, this.height, undefined, 'FAST');
 
     const { lng, lat } = map.getCenter();
