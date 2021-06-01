@@ -31,6 +31,8 @@ Note. `mbgljs-v2` branch is not being maintained actively although it has been u
 
 ## Demo:
 
+Try [codesandbox](https://codesandbox.io/s/mapbox-gl-export-8x4lw?file=/src/index.ts).
+
 See [demo](https://watergis.github.io/mapbox-gl-export/#12/-1.08551/35.87063).
 
 ![demo.gif](./demo.gif)
