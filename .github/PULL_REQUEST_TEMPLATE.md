@@ -13,9 +13,10 @@ Please describe what you changed briefly.
 <!-- ignore-task-list-end -->
 
 ## Verify the followings
-
+<!-- ignore-task-list-start -->
 - [ ] Code is up-to-date with the `main` branch
 - [ ] No lint errors after `npm run lint`
 - [ ] Make sure all the exsiting features working well
+<!-- ignore-task-list-end -->
 
 Refer to [CONTRIBUTING.MD](https://github.com/watergis/mapbox-gl-export/tree/master/.github/CONTRIBUTING.md) for more details.
