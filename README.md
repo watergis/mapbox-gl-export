@@ -1,8 +1,9 @@
 # mapbox-gl-export
-![](https://github.com/watergis/mapbox-gl-export/workflows/build/badge.svg)
-![](https://github.com/watergis/mapbox-gl-export/workflows/deploy%20gh-pages/badge.svg)
-![](https://github.com/watergis/mapbox-gl-export/workflows/Release%20Draft/badge.svg)
-![](https://github.com/watergis/mapbox-gl-export/workflows/Node.js%20Package/badge.svg)
+
+![badge](https://github.com/watergis/mapbox-gl-export/workflows/build/badge.svg)
+![badge](https://github.com/watergis/mapbox-gl-export/workflows/deploy%20gh-pages/badge.svg)
+![badge](https://github.com/watergis/mapbox-gl-export/workflows/Release%20Draft/badge.svg)
+![badge](https://github.com/watergis/mapbox-gl-export/workflows/Node.js%20Package/badge.svg)
 ![GitHub](https://img.shields.io/github/license/watergis/mapbox-gl-export)
 
 This module adds control which can export PDF and images.
@@ -13,7 +14,7 @@ This module is using source code of [mpetroff/print-maps](https://github.com/mpe
 
 Please consider to use [maplibre-gl-export](https://github.com/watergis/maplibre-gl-export) plugin for Maplibre GL.
 
-## Installation:
+## Installation
 
 - for mapbox-gl-js v1 open source users
 
@@ -23,13 +24,13 @@ npm i @watergis/mapbox-gl-export --save
 
 - for mapbox-gl-js v2 users
 
-```
+```bash
 npm i git+https://github.com/watergis/mapbox-gl-export.git#mbgljs-v2
 ```
 
 Note. `mbgljs-v2` branch is not being maintained actively although it has been upgraded to v2 library. This repository does not support anything for mapbox-gl-js v2.
 
-## Demo:
+## Demo
 
 Try [codesandbox](https://codesandbox.io/s/mapbox-gl-export-8x4lw?file=/src/index.ts).
 
@@ -37,7 +38,7 @@ See [demo](https://watergis.github.io/mapbox-gl-export/#12/-1.08551/35.87063).
 
 ![demo.gif](./demo.gif)
 
-## Usage:
+## Usage
 
 ```ts
 import { MapboxExportControl, Size, PageOrientation, Format, DPI} from "@watergis/mapbox-gl-export";
@@ -58,6 +59,7 @@ map.addControl(new MapboxExportControl({
 ```
 
 ### Options
+
 You can specify default option as follows.
 
 - PageSize
@@ -82,11 +84,13 @@ You can specify default option as follows.
 When you use exported map, please includes attribution as follows.
 
 If you can include HTML, use this code snippet that includes links to Mapbox & OpenStreetMap:
+
 ```html
 © NARWASSCO, Ltd. © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>Powered by the United Nations Vector Tile Toolkit
 ```
 
 For print output or if you can’t include links, use this text-only attribution:
+
 ```
 © NARWASSCO, Ltd. ©Mapbox ©OpenStreetMap contributors, Powered by the United Nations Vector Tile Toolkit
 ```
@@ -95,9 +99,9 @@ For print output or if you can’t include links, use this text-only attribution
 
 Also, default example is using base map by United Nation Vector Tile Toolkit. That is why `Powered by the United Nations Vector Tile Toolkit` is included in above.
 
-## Development:
+## Development
 
-```
+```bash
 npm run lint # check styling of source code
 npm run lint:fix # fix styling by eslint
 npm run dev
@@ -107,9 +111,9 @@ open [http://localhost:8080](http://localhost:8080).
 
 If there are any changes on source code, it will be reflected automatically.
 
-## Build package:
+## Build package
 
-```
+```bash
 npm run build
 ```
 
@@ -117,7 +121,7 @@ The modules will be generated under `dist` folder.
 
 ## Deploy to Github pages
 
-```
+```bash
 npm run deploy
 ```
 
