@@ -57,6 +57,7 @@ export default class MapboxExportControl implements IControl {
       this.exportButton = document.createElement('button');
       this.exportButton.classList.add('mapboxgl-ctrl-icon');
       this.exportButton.classList.add('mapboxgl-export-control');
+      this.exportButton.type = 'button';
       this.exportButton.addEventListener('click', () => {
         this.exportButton.style.display = 'none';
         this.exportContainer.style.display = 'block';
@@ -92,6 +93,7 @@ export default class MapboxExportControl implements IControl {
       this.exportContainer.appendChild(table);
 
       const generateButton = document.createElement('button');
+      generateButton.type = 'button';
       generateButton.textContent = 'Generate';
       generateButton.classList.add('generate-button');
       generateButton.addEventListener('click', () => {
