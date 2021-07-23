@@ -10,6 +10,7 @@ type Options = {
   Format: string;
   DPI: number;
   Crosshair?: boolean;
+  accessToken?: string;
 }
 
 /**
@@ -33,6 +34,7 @@ export default class MapboxExportControl implements IControl {
       Format: Format.PDF,
       DPI: DPI[300],
       Crosshair: false,
+      accessToken: undefined,
     }
 
     constructor(options: Options) {
@@ -112,6 +114,7 @@ export default class MapboxExportControl implements IControl {
           Number(dpiType.value),
           formatType.value,
           Unit.mm,
+          this.options.accessToken,
         );
         mapGenerator.generate();
       });
