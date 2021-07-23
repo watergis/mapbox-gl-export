@@ -96,7 +96,7 @@ export default class MapGenerator {
 
   private unit: Unit;
 
-  private accessToken: string | undefined;
+  private accesstoken: string | undefined;
 
   /**
    * Constructor
@@ -112,7 +112,7 @@ export default class MapGenerator {
     dpi: number = 300,
     format:string = Format.PNG.toString(),
     unit: Unit = Unit.mm,
-    accessToken?: string,
+    accesstoken?: string,
   ) {
     this.map = map;
     this.width = size[0];
@@ -120,7 +120,7 @@ export default class MapGenerator {
     this.dpi = dpi;
     this.format = format;
     this.unit = unit;
-    this.accessToken = accessToken;
+    this.accesstoken = accesstoken;
   }
 
   /**
@@ -164,7 +164,7 @@ export default class MapGenerator {
 
     // Render map
     const renderMap = new MapboxMap({
-      accessToken: this.accessToken || accessToken,
+      accessToken: this.accesstoken || accessToken,
       container,
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),
