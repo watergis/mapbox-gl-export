@@ -231,6 +231,7 @@ export default class MapGenerator {
    */
   private toPNG(canvas: HTMLCanvasElement, fileName: string) {
     canvas.toBlob((blob) => {
+      // @ts-ignore
       saveAs(blob, fileName);
     });
   }
@@ -302,6 +303,7 @@ export default class MapGenerator {
 
       tmpCanvas.add(image);
       const svg = tmpCanvas.toSVG({
+        // @ts-ignore
         x: 0,
         y: 0,
         width: pxWidth,

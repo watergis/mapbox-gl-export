@@ -16,19 +16,9 @@ Please consider to use [maplibre-gl-export](https://github.com/watergis/maplibre
 
 ## Installation
 
-- for mapbox-gl-js v1 open source users
-
 ```bash
 npm i @watergis/mapbox-gl-export --save
 ```
-
-- for mapbox-gl-js v2 users
-
-```bash
-npm i git+https://github.com/watergis/mapbox-gl-export.git#mbgljs-v2
-```
-
-Note. `mbgljs-v2` branch is not being maintained actively although it has been upgraded to v2 library. This repository does not support anything for mapbox-gl-js v2.
 
 ## Demo
 
@@ -56,6 +46,24 @@ map.addControl(new MapboxExportControl({
     DPI: DPI[96],
     Crosshair: true
 }), 'top-right');
+```
+
+### if you want to use a basemap from Mapbox
+
+- for mapbox v1 user
+
+```ts
+mapboxgl.accessToken='your mapbox access token'
+```
+
+- for mapbox v2 user
+
+```ts
+const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    accessToken: 'your mapbox access token'
+});
 ```
 
 ### Options
