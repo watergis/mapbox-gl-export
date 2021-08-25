@@ -19,7 +19,7 @@ export default class CrosshairManager {
       map: MapboxMap | undefined,
     ) {
       this.map = map;
-      this.mapResize = this.mapResize.bind(this)
+      this.mapResize = this.mapResize.bind(this);
     }
 
     public create() {
