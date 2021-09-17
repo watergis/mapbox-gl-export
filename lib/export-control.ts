@@ -1,5 +1,6 @@
 import { IControl, Map as MapboxMap } from 'mapbox-gl';
 import CrosshairManager from './crosshair-manager';
+import PrintableAreaManager from './printable-area-manager';
 import MapGenerator, {
   Size, Format, PageOrientation, DPI, Unit,
 } from './map-generator';
@@ -10,6 +11,7 @@ type Options = {
   Format: string;
   DPI: number;
   Crosshair?: boolean;
+  PrintableArea: boolean;
   accessToken?: string;
 }
 
@@ -24,6 +26,8 @@ export default class MapboxExportControl implements IControl {
 
     private crosshair: CrosshairManager | undefined;
 
+    private printableArea: PrintableAreaManager | undefined;
+
     private map?: MapboxMap;
 
     private exportButton: HTMLButtonElement;
@@ -34,6 +38,7 @@ export default class MapboxExportControl implements IControl {
       Format: Format.PDF,
       DPI: DPI[300],
       Crosshair: false,
+      PrintableArea: false,
       accessToken: undefined,
     }
 
@@ -64,6 +69,7 @@ export default class MapboxExportControl implements IControl {
         this.exportButton.style.display = 'none';
         this.exportContainer.style.display = 'block';
         this.toggleCrosshair(true);
+        this.togglePrintableArea(true);
       });
       document.addEventListener('click', this.onDocumentClick);
       this.controlContainer.appendChild(this.exportButton);
@@ -146,6 +152,7 @@ export default class MapboxExportControl implements IControl {
         }
         content.appendChild(optionLayout);
       });
+      content.addEventListener('change', () => { this.updatePrintableArea(); });
 
       const tr1 = document.createElement('TR');
       const tdLabel = document.createElement('TD');
@@ -185,6 +192,7 @@ export default class MapboxExportControl implements IControl {
         this.exportContainer.style.display = 'none';
         this.exportButton.style.display = 'block';
         this.toggleCrosshair(false);
+        this.togglePrintableArea(false);
       }
     }
 
@@ -200,5 +208,33 @@ export default class MapboxExportControl implements IControl {
           this.crosshair.create();
         }
       }
+    }
+
+    private togglePrintableArea(state: boolean) {
+      if (this.options.PrintableArea === true) {
+        if (state === false) {
+          if (this.printableArea !== undefined) {
+            this.printableArea.destroy();
+            this.printableArea = undefined;
+          }
+        } else {
+          this.printableArea = new PrintableAreaManager(this.map);
+          this.updatePrintableArea();
+        }
+      }
+    }
+
+    private updatePrintableArea() {
+      if (this.printableArea === undefined) {
+        return;
+      }
+      const pageSize: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-size');
+      const pageOrientation: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-orientaiton');
+      const orientValue = pageOrientation.value;
+      let pageSizeValue = JSON.parse(pageSize.value);
+      if (orientValue === PageOrientation.Portrait) {
+        pageSizeValue = pageSizeValue.reverse();
+      }
+      this.printableArea.updateArea(pageSizeValue[0], pageSizeValue[1]);
     }
 }

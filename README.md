@@ -44,7 +44,8 @@ map.addControl(new MapboxExportControl({
     PageOrientation: PageOrientation.Portrait,
     Format: Format.PNG,
     DPI: DPI[96],
-    Crosshair: true
+    Crosshair: true,
+    PrintableArea: true
 }), 'top-right');
 ```
 
@@ -86,7 +87,10 @@ You can specify default option as follows.
   - Display crosshair on the map. it helps to adjust the map center before printing.
   - accepts `true` and `false` value
   - default is `false`
-
+- PritableArea
+  - Display printable area on the map it helps to adjust pritable area before printing.
+  - accepts `true` and `false` value
+  - default is `false`
 ## Attribution
 
 When you use exported map, please includes attribution as follows.
