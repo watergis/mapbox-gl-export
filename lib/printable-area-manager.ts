@@ -23,6 +23,8 @@ export default class PrintableAreaManager {
       if (this.map === undefined) {
         return;
       }
+      this.mapResize = this.mapResize.bind(this);
+      this.map.on('resize', this.mapResize);
       const clientWidth = this.map?.getCanvas().clientWidth;
       const clientHeight = this.map?.getCanvas().clientHeight;
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -38,6 +40,10 @@ export default class PrintableAreaManager {
       this.map?.getCanvasContainer().appendChild(svg);
       this.svgCanvas = svg;
       this.svgPath = path;
+    }
+
+    private mapResize() {
+      this.generateCutOut();
     }
 
     public updateArea(width: number, height: number) {
