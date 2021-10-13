@@ -20,6 +20,26 @@ Please consider to use [maplibre-gl-export](https://github.com/watergis/maplibre
 npm i @watergis/mapbox-gl-export --save
 ```
 
+## Use CDN
+
+```html
+<link href='https://watergis.github.io/mapbox-gl-export/mapbox-gl-export.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.13.1/mapbox-gl.js'></script>
+<script src="https://watergis.github.io/mapbox-gl-export/mapbox-gl-export.js"></script>
+<script>
+  map.addControl(new watergis.MapboxExportControl({
+      PageSize: watergis.Size.A3,
+      PageOrientation: watergis.PageOrientation.Portrait,
+      Format: watergis.Format.PNG,
+      DPI: watergis.DPI[96],
+      Crosshair: true,
+      PrintableArea: true,
+  }), 'top-right');
+</script>
+```
+
+Furthermore, you may download specific version's scripts and css locally from [release](https://github.com/watergis/mapbox-gl-export/releases) page.
+
 ## Demo
 
 Try [codesandbox](https://codesandbox.io/s/mapbox-gl-export-8x4lw?file=/src/index.ts).
