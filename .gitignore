@@ -1,5 +1,6 @@
 example/*bundle.js
 example/*bundle.js.LICENSE.txt
+example/mapbox-gl-export.*
 
 # Logs
 logs
