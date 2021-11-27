@@ -78,13 +78,17 @@ mapboxgl.accessToken='your mapbox access token'
 ```
 
 - for mapbox v2 user
+There is an option of `accessToken` in `MapboxExportControl`. Please put your accessToken when you create a instance of plugin.
 
 ```ts
+mapboxgl.accessToken='your mapbox access token'
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    accessToken: 'your mapbox access token'
 });
+map.addControl(new MapboxExportControl({
+    accessToken: 'your mapbox access token'
+}), 'top-right');
 ```
 
 ### Options
