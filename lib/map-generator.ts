@@ -68,6 +68,14 @@ export const Size = {
 } as const;
 type Size = typeof Size[keyof typeof Size];
 
+declare global {
+  // eslint-disable-next-line no-unused-vars
+  interface Navigator {
+    // eslint-disable-next-line no-unused-vars
+    msSaveBlob?: (blob: any, defaultName?: string) => boolean
+  }
+}
+
 export const PageOrientation = {
   Landscape: 'landscape',
   Portrait: 'portrait',
@@ -244,7 +252,7 @@ export default class MapGenerator {
   private toJPEG(canvas: HTMLCanvasElement, fileName: string) {
     const uri = canvas.toDataURL('image/jpeg', 0.85);
     // @ts-ignore
-    if (canvas.msToBlob) {
+    if (canvas.msToBlob && window.navigator?.msSaveBlob) {
       // for IE11
       const blob = this.toBlob(uri);
       window.navigator.msSaveBlob(blob, fileName);
