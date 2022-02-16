@@ -20,5 +20,6 @@ import '../css/styles.css';
         DPI: DPI[96],
         Crosshair: true,
         PrintableArea: true,
+        Local: 'en'
     }), 'top-right');
 })()
