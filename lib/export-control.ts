@@ -1,6 +1,7 @@
 import { IControl, Map as MapboxMap } from 'mapbox-gl';
 import CrosshairManager from './crosshair-manager';
 import PrintableAreaManager from './printable-area-manager';
+import { english, french, Translation } from './local';
 import MapGenerator, {
   Size, Format, PageOrientation, DPI, Unit,
 } from './map-generator';
@@ -13,6 +14,7 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
+  Local?: 'en' | 'fr';
 }
 
 /**
@@ -54,6 +56,17 @@ export default class MapboxExportControl implements IControl {
       return defaultPosition;
     }
 
+    public getTranslation(): Translation {
+      switch (this.options.Local) {
+        case 'en':
+          return english;
+        case 'fr':
+          return french;
+        default:
+          return english;
+      }
+    }
+
     public onAdd(map: MapboxMap): HTMLElement {
       this.map = map;
       this.controlContainer = document.createElement('div');
@@ -79,22 +92,22 @@ export default class MapboxExportControl implements IControl {
       table.className = 'print-table';
 
       const tr1 = this.createSelection(
-        Size, 'Page Size', 'page-size', this.options.PageSize, (data, key) => JSON.stringify(data[key]),
+        Size, this.getTranslation().PageSize, 'page-size', this.options.PageSize, (data, key) => JSON.stringify(data[key]),
       );
       table.appendChild(tr1);
 
       const tr2 = this.createSelection(
-        PageOrientation, 'Page Orientation', 'page-orientaiton', this.options.PageOrientation, (data, key) => data[key],
+        PageOrientation, this.getTranslation().PageOrientation, 'page-orientaiton', this.options.PageOrientation, (data, key) => data[key],
       );
       table.appendChild(tr2);
 
       const tr3 = this.createSelection(
-        Format, 'Format', 'format-type', this.options.Format, (data, key) => data[key],
+        Format, this.getTranslation().Format, 'format-type', this.options.Format, (data, key) => data[key],
       );
       table.appendChild(tr3);
 
       const tr4 = this.createSelection(
-        DPI, 'DPI', 'dpi-type', this.options.DPI, (data, key) => data[key],
+        DPI, this.getTranslation().DPI, 'dpi-type', this.options.DPI, (data, key) => data[key],
       );
       table.appendChild(tr4);
 

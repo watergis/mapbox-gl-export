@@ -243,19 +243,11 @@ export default class MapGenerator {
    */
   private toJPEG(canvas: HTMLCanvasElement, fileName: string) {
     const uri = canvas.toDataURL('image/jpeg', 0.85);
-    // @ts-ignore
-    if (canvas.msToBlob) {
-      // for IE11
-      const blob = this.toBlob(uri);
-      window.navigator.msSaveBlob(blob, fileName);
-    } else {
-      // for other browsers except IE11
-      const a = document.createElement('a');
-      a.href = uri;
-      a.download = fileName;
-      a.click();
-      a.remove();
-    }
+    const a = document.createElement('a');
+    a.href = uri;
+    a.download = fileName;
+    a.click();
+    a.remove();
   }
 
   /**
@@ -333,19 +325,5 @@ export default class MapGenerator {
       conversionFactor /= 25.4;
     }
     return `${conversionFactor * length}px`;
-  }
-
-  /**
-   * Convert base64 to Blob
-   * @param base64 string value for base64
-   */
-  private toBlob(base64: string): Blob {
-    const bin = atob(base64.replace(/^.*,/, ''));
-    const buffer = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i += 1) {
-      buffer[i] = bin.charCodeAt(i);
-    }
-    const blob = new Blob([buffer.buffer], { type: 'image/png' });
-    return blob;
   }
 }
