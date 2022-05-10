@@ -1,7 +1,7 @@
 import { IControl, Map as MapboxMap } from 'mapbox-gl';
 import CrosshairManager from './crosshair-manager';
 import PrintableAreaManager from './printable-area-manager';
-import { english, french, Translation } from './local';
+import { english, finnish, french, swedish, Translation } from './local';
 import MapGenerator, {
   Size, Format, PageOrientation, DPI, Unit,
 } from './map-generator';
@@ -14,7 +14,7 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
-  Local?: 'en' | 'fr';
+  Local?: 'en' | 'fr'| 'fi' | 'sv';
 }
 
 /**
@@ -62,6 +62,10 @@ export default class MapboxExportControl implements IControl {
           return english;
         case 'fr':
           return french;
+        case 'fi':
+          return finnish;
+        case 'sv':
+          return swedish;
         default:
           return english;
       }
