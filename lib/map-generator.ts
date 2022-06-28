@@ -162,21 +162,6 @@ export default class MapGenerator {
     container.style.height = this.toPixels(this.height);
     hidden.appendChild(container);
 
-    // Render map
-    const renderMap = new MapboxMap({
-      accessToken: this.accesstoken || accessToken,
-      container,
-      center: this.map.getCenter(),
-      zoom: this.map.getZoom(),
-      bearing: this.map.getBearing(),
-      pitch: this.map.getPitch(),
-      interactive: false,
-      preserveDrawingBuffer: true,
-      fadeDuration: 0,
-      attributionControl: false,
-      // hack to read transfrom request callback function
-      transformRequest: (this.map as any)._requestManager._transformRequestFn,
-    });
     const style = this.map.getStyle();
     if (style && style.sources) {
       const sources = style.sources;
@@ -190,7 +175,28 @@ export default class MapGenerator {
       });
     }
 
-    renderMap.setStyle(style);
+    // Render map
+    const renderMap = new MapboxMap({
+      accessToken: this.accesstoken || accessToken,
+      container,
+      style,
+      center: this.map.getCenter(),
+      zoom: this.map.getZoom(),
+      bearing: this.map.getBearing(),
+      pitch: this.map.getPitch(),
+      interactive: false,
+      preserveDrawingBuffer: true,
+      fadeDuration: 0,
+      attributionControl: false,
+      // hack to read transfrom request callback function
+      transformRequest: (this.map as any)._requestManager._transformRequestFn,
+    });
+
+    // @ts-ignore
+    const images = (this.map.style.imageManager || {}).images || [];
+    Object.keys(images).forEach((key) => {
+      renderMap.addImage(key, images[key].data);
+    });
 
     renderMap.once('idle', () => {
       const canvas = renderMap.getCanvas();
