@@ -2,6 +2,7 @@ import english from './en';
 import french from './fr';
 import finnish from './fi';
 import swedish from './sv';
+import vietnam from './vi';
 
 type Translation = {
   PageSize: string;
@@ -16,5 +17,6 @@ export {
   french,
   finnish,
   swedish,
+  vietnam,
   Translation,
 };
