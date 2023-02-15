@@ -16,7 +16,7 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
-  Local?: 'de' | 'fr' | 'fi' | 'en' | 'sv' | 'vi';
+  Local?: 'de' | 'en' | 'fr' | 'fi' | 'sv' | 'vi';
 }
 
 /**
