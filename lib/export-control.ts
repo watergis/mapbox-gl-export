@@ -117,7 +117,7 @@ export default class MapboxExportControl implements IControl {
 
     const generateButton = document.createElement('button');
     generateButton.type = 'button';
-    generateButton.textContent = 'Generate';
+    generateButton.textContent = this.getTranslation().Generate;
     generateButton.classList.add('generate-button');
     generateButton.addEventListener('click', () => {
       const pageSize: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-size');
