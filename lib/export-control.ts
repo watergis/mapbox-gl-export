@@ -1,7 +1,9 @@
 import { IControl, Map as MapboxMap } from 'mapbox-gl';
 import CrosshairManager from './crosshair-manager';
 import PrintableAreaManager from './printable-area-manager';
-import { english, finnish, french, swedish, Translation, vietnam } from './local';
+import {
+  english, finnish, french, german, swedish, Translation, vietnam,
+} from './local';
 import MapGenerator, {
   Size, Format, PageOrientation, DPI, Unit,
 } from './map-generator';
@@ -14,7 +16,7 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
-  Local?: 'en' | 'fr' | 'fi' | 'sv' | 'vi';
+  Local?: 'de' | 'fr' | 'fi' | 'en' | 'sv' | 'vi';
 }
 
 /**
@@ -42,7 +44,7 @@ export default class MapboxExportControl implements IControl {
     Crosshair: false,
     PrintableArea: false,
     accessToken: undefined,
-  }
+  };
 
   constructor(options: Options) {
     if (options) {
@@ -58,6 +60,8 @@ export default class MapboxExportControl implements IControl {
 
   public getTranslation(): Translation {
     switch (this.options.Local) {
+      case 'de':
+        return german;
       case 'en':
         return english;
       case 'fr':
@@ -97,24 +101,16 @@ export default class MapboxExportControl implements IControl {
     const table = document.createElement('TABLE');
     table.className = 'print-table';
 
-    const tr1 = this.createSelection(
-      Size, this.getTranslation().PageSize, 'page-size', this.options.PageSize, (data, key) => JSON.stringify(data[key]),
-    );
+    const tr1 = this.createSelection(Size, this.getTranslation().PageSize, 'page-size', this.options.PageSize, (data, key) => JSON.stringify(data[key]));
     table.appendChild(tr1);
 
-    const tr2 = this.createSelection(
-      PageOrientation, this.getTranslation().PageOrientation, 'page-orientaiton', this.options.PageOrientation, (data, key) => data[key],
-    );
+    const tr2 = this.createSelection(PageOrientation, this.getTranslation().PageOrientation, 'page-orientaiton', this.options.PageOrientation, (data, key) => data[key]);
     table.appendChild(tr2);
 
-    const tr3 = this.createSelection(
-      Format, this.getTranslation().Format, 'format-type', this.options.Format, (data, key) => data[key],
-    );
+    const tr3 = this.createSelection(Format, this.getTranslation().Format, 'format-type', this.options.Format, (data, key) => data[key]);
     table.appendChild(tr3);
 
-    const tr4 = this.createSelection(
-      DPI, this.getTranslation().DPI, 'dpi-type', this.options.DPI, (data, key) => data[key],
-    );
+    const tr4 = this.createSelection(DPI, this.getTranslation().DPI, 'dpi-type', this.options.DPI, (data, key) => data[key]);
     table.appendChild(tr4);
 
     this.exportContainer.appendChild(table);
