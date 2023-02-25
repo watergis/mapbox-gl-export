@@ -6,12 +6,7 @@ name: build
 on:
   push:
     branches: [ master ]
-    paths:
-      - "lib/**"
-
   pull_request:
-    paths:
-      - "lib/**"
 
 jobs:
   build:
