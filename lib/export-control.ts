@@ -2,10 +2,21 @@ import { IControl, Map as MapboxMap } from 'mapbox-gl';
 import CrosshairManager from './crosshair-manager';
 import PrintableAreaManager from './printable-area-manager';
 import {
-  english, finnish, french, german, swedish, Translation, vietnam,
+  english,
+  finnish,
+  french,
+  german,
+  swedish,
+  Translation,
+  vietnam,
+  ukranian,
 } from './local';
 import MapGenerator, {
-  Size, Format, PageOrientation, DPI, Unit,
+  Size,
+  Format,
+  PageOrientation,
+  DPI,
+  Unit,
 } from './map-generator';
 
 type Options = {
@@ -16,8 +27,8 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
-  Local?: 'de' | 'en' | 'fr' | 'fi' | 'sv' | 'vi';
-}
+  Local?: 'de' | 'en' | 'fr' | 'fi' | 'sv' | 'vi' | 'uk';
+};
 
 /**
  * Mapbox GL Export Control.
@@ -72,6 +83,8 @@ export default class MapboxExportControl implements IControl {
         return swedish;
       case 'vi':
         return vietnam;
+      case 'uk':
+        return ukranian;
       default:
         return english;
     }
@@ -101,16 +114,40 @@ export default class MapboxExportControl implements IControl {
     const table = document.createElement('TABLE');
     table.className = 'print-table';
 
-    const tr1 = this.createSelection(Size, this.getTranslation().PageSize, 'page-size', this.options.PageSize, (data, key) => JSON.stringify(data[key]));
+    const tr1 = this.createSelection(
+      Size,
+      this.getTranslation().PageSize,
+      'page-size',
+      this.options.PageSize,
+      (data, key) => JSON.stringify(data[key]),
+    );
     table.appendChild(tr1);
 
-    const tr2 = this.createSelection(PageOrientation, this.getTranslation().PageOrientation, 'page-orientaiton', this.options.PageOrientation, (data, key) => data[key]);
+    const tr2 = this.createSelection(
+      PageOrientation,
+      this.getTranslation().PageOrientation,
+      'page-orientaiton',
+      this.options.PageOrientation,
+      (data, key) => data[key],
+    );
     table.appendChild(tr2);
 
-    const tr3 = this.createSelection(Format, this.getTranslation().Format, 'format-type', this.options.Format, (data, key) => data[key]);
+    const tr3 = this.createSelection(
+      Format,
+      this.getTranslation().Format,
+      'format-type',
+      this.options.Format,
+      (data, key) => data[key],
+    );
     table.appendChild(tr3);
 
-    const tr4 = this.createSelection(DPI, this.getTranslation().DPI, 'dpi-type', this.options.DPI, (data, key) => data[key]);
+    const tr4 = this.createSelection(
+      DPI,
+      this.getTranslation().DPI,
+      'dpi-type',
+      this.options.DPI,
+      (data, key) => data[key],
+    );
     table.appendChild(tr4);
 
     this.exportContainer.appendChild(table);
@@ -120,10 +157,18 @@ export default class MapboxExportControl implements IControl {
     generateButton.textContent = this.getTranslation().Generate;
     generateButton.classList.add('generate-button');
     generateButton.addEventListener('click', () => {
-      const pageSize: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-size');
-      const pageOrientation: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-orientaiton');
-      const formatType: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-format-type');
-      const dpiType: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-dpi-type');
+      const pageSize: HTMLSelectElement = <HTMLSelectElement>(
+        document.getElementById('mapbox-gl-export-page-size')
+      );
+      const pageOrientation: HTMLSelectElement = <HTMLSelectElement>(
+        document.getElementById('mapbox-gl-export-page-orientaiton')
+      );
+      const formatType: HTMLSelectElement = <HTMLSelectElement>(
+        document.getElementById('mapbox-gl-export-format-type')
+      );
+      const dpiType: HTMLSelectElement = <HTMLSelectElement>(
+        document.getElementById('mapbox-gl-export-dpi-type')
+      );
       const orientValue = pageOrientation.value;
       let pageSizeValue = JSON.parse(pageSize.value);
       if (orientValue === PageOrientation.Portrait) {
@@ -167,7 +212,9 @@ export default class MapboxExportControl implements IControl {
       }
       content.appendChild(optionLayout);
     });
-    content.addEventListener('change', () => { this.updatePrintableArea(); });
+    content.addEventListener('change', () => {
+      this.updatePrintableArea();
+    });
 
     const tr1 = document.createElement('TR');
     const tdLabel = document.createElement('TD');
@@ -180,10 +227,12 @@ export default class MapboxExportControl implements IControl {
   }
 
   public onRemove(): void {
-    if (!this.controlContainer
+    if (
+      !this.controlContainer
       || !this.controlContainer.parentNode
       || !this.map
-      || !this.exportButton) {
+      || !this.exportButton
+    ) {
       return;
     }
     this.exportButton.removeEventListener('click', this.onDocumentClick);
@@ -203,7 +252,8 @@ export default class MapboxExportControl implements IControl {
       this.controlContainer
       && !this.controlContainer.contains(event.target as Element)
       && this.exportContainer
-      && this.exportButton) {
+      && this.exportButton
+    ) {
       this.exportContainer.style.display = 'none';
       this.exportButton.style.display = 'block';
       this.toggleCrosshair(false);
@@ -243,8 +293,12 @@ export default class MapboxExportControl implements IControl {
     if (this.printableArea === undefined) {
       return;
     }
-    const pageSize: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-size');
-    const pageOrientation: HTMLSelectElement = <HTMLSelectElement>document.getElementById('mapbox-gl-export-page-orientaiton');
+    const pageSize: HTMLSelectElement = <HTMLSelectElement>(
+      document.getElementById('mapbox-gl-export-page-size')
+    );
+    const pageOrientation: HTMLSelectElement = <HTMLSelectElement>(
+      document.getElementById('mapbox-gl-export-page-orientaiton')
+    );
     const orientValue = pageOrientation.value;
     let pageSizeValue = JSON.parse(pageSize.value);
     if (orientValue === PageOrientation.Portrait) {

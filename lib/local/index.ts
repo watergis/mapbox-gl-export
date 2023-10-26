@@ -4,6 +4,7 @@ import finnish from './fi';
 import german from './de';
 import swedish from './sv';
 import vietnam from './vi';
+import ukranian from './uk';
 
 type Translation = {
   PageSize: string;
@@ -11,7 +12,7 @@ type Translation = {
   Format: string;
   DPI: string;
   Generate: string;
-}
+};
 
 export {
   english,
@@ -20,5 +21,6 @@ export {
   german,
   swedish,
   vietnam,
+  ukranian,
   Translation,
 };
