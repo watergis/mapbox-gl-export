@@ -4,8 +4,8 @@ import finnish from './fi';
 import german from './de';
 import swedish from './sv';
 import vietnam from './vi';
-import zhHansCN from './zh_Hans_CN';
-import zhHantCN from './zh_Hant_CN';
+import zhHans from './zhHans';
+import zhHant from './zhHant';
 
 type Translation = {
   PageSize: string;
@@ -22,7 +22,7 @@ export {
   german,
   swedish,
   vietnam,
-  zhHansCN,
-  zhHantCN,
+  zhHans,
+  zhHant,
   Translation,
 };
