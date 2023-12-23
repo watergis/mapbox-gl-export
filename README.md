@@ -121,6 +121,8 @@ You can specify default option as follows.
   - `fr` french
   - `fi` finnish
   - `sv` swedish
+  - `zhHans` Chinese Simplified
+  - `zhHant` Chinese Traditional
 ## Attribution
 
 When you use exported map, please includes attribution as follows.

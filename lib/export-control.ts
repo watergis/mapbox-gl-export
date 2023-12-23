@@ -10,6 +10,8 @@ import {
   Translation,
   vietnam,
   ukranian,
+  zhHans, 
+  zhHant
 } from './local';
 import MapGenerator, {
   Size,
@@ -27,7 +29,7 @@ type Options = {
   Crosshair?: boolean;
   PrintableArea: boolean;
   accessToken?: string;
-  Local?: 'de' | 'en' | 'fr' | 'fi' | 'sv' | 'vi' | 'uk';
+  Local?: 'de' | 'en' | 'fr' | 'fi' | 'sv' | 'vi' | 'uk' | 'zhHans' | 'zhHant';
 };
 
 /**
@@ -85,6 +87,10 @@ export default class MapboxExportControl implements IControl {
         return vietnam;
       case 'uk':
         return ukranian;
+      case 'zhHans':
+        return zhHans;
+      case 'zhHant':
+        return zhHant;
       default:
         return english;
     }

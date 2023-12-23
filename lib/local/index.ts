@@ -5,6 +5,8 @@ import german from './de';
 import swedish from './sv';
 import vietnam from './vi';
 import ukranian from './uk';
+import zhHans from './zhHans';
+import zhHant from './zhHant';
 
 type Translation = {
   PageSize: string;
@@ -22,5 +24,7 @@ export {
   swedish,
   vietnam,
   ukranian,
+  zhHans,
+  zhHant,
   Translation,
 };
