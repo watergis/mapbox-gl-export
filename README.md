@@ -1,3 +1,5 @@
+# This repository was merged into [maplibre-gl-export](https://github.com/watergis/maplibre-gl-export/tree/main/packages/mapbox-gl-export)
+
 # mapbox-gl-export
 
 ![badge](https://github.com/watergis/mapbox-gl-export/workflows/build/badge.svg)
@@ -9,6 +11,8 @@
 This module adds control which can export PDF and images.
 
 This module is using source code of [mpetroff/print-maps](https://github.com/mpetroff/print-maps). I just adopted this library to normal Mapbox GL Plugin. Thanks so much to develop this library!
+
+This plugin was merged into [maplibre-gl-export](https://github.com/watergis/maplibre-gl-export) repository as a monorepo package. Don't worry, it still supports Mapbox GL JS with the same package name of `@watergis/mapbox-gl-export`!
 
 ## for Maplibre GL users
 
